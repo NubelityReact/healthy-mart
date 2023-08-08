@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  api:
+    container_name: api
+    build:
+      dockerfile: ./apps/api/Dockerfile
+      context: .
+    ports:
+      - 5000:5000
+    depends_on:
+      - database
+    restart: always
+    volumes:
+      - ./apps/api/:/app/apps/api/
+  database: # TODO: Add env file
+    container_name: db
+    image: mongo
+    logging:
+      driver: none
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb:/data/db
+
+volumes:
+  mongodb:
