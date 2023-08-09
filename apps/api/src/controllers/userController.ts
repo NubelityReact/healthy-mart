@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import {
   createUserService,
   deleteUserService,
+  getUserByCustomField,
   getUserByIdService,
   getUserService,
   updateUserService,

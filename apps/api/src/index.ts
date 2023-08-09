@@ -1,20 +1,22 @@
 import "reflect-metadata";
 import express, { Request, Response } from "express";
-import { UserRouter } from "./routes";
+import { AuthRouter, UserRouter } from "./routes";
 import startDBConnection from "./db";
+import config from "./config/config";
 
 const app = express();
+const PORT = config.port;
 app.use(express.json());
 
-app.use("/", (req: Request, res: Response) => {
-  res.send("Docker is aware of changes");
+app.get("/", (req: Request, res: Response) => {
+  res.send("changes");
 });
 
 app.use("/users", UserRouter);
+app.use("/auth", AuthRouter);
 
 startDBConnection();
 
-const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`Server is running in port ${PORT}`);
 });

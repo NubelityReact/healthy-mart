@@ -21,12 +21,24 @@ export const getUserByIdService = async (
   }
 };
 
+export const getUserByCustomField = async (
+  fieldName: string,
+  fieldValue: any
+): Promise<DocumentType<UserClass> | null> => {
+  try {
+    const user = await User.findOne({ [fieldName]: fieldValue });
+    return user;
+  } catch (error) {
+    throw new Error("Failed to get user by Id");
+  }
+};
+
 export const createUserService = async (
   userData: UserClass
 ): Promise<DocumentType<UserClass>> => {
   try {
     const newUser = new User(userData);
-    newUser.save();
+    await newUser.save();
     return newUser;
   } catch (error) {
     throw new Error("Failed to create user");

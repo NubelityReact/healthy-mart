@@ -1,8 +1,9 @@
 //@ts-nocheck
 import mongoose from "mongoose";
+import config from "./config/config";
 
 async function startDBConnection() {
-  await mongoose.connect("mongodb://db:27017/ecommerce");
+  await mongoose.connect(config.dbUrl);
 }
 
 export default startDBConnection;
