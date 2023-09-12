@@ -2,7 +2,7 @@ module.exports = {
   root: true,
   extends: ["custom"],
   rules: {
-    "no-console": "error",
+    "import/no-anonymous-default-export": "off",
     "turbo/no-undeclared-env-vars": "off",
   },
 };

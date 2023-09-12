@@ -1,13 +1,13 @@
-import { Router } from "express";
+import express from "express";
 import {
-  createUser,
-  deleteUser,
-  getUserById,
   getUsers,
+  getUserById,
+  createUser,
   updateUser,
-} from "../controllers/userController";
+  deleteUser,
+} from "../controllers/usersController";
 
-const router = Router();
+const router = express.Router();
 
 // GET /users
 router.get("/", getUsers);

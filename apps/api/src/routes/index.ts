@@ -1,2 +1,4 @@
-export { default as UserRouter } from "./usersRouter";
-export { default as AuthRouter } from "./authRouter";
+export { default as UserRouter } from "./usersRoutes";
+export { default as AuthRouter } from "./authRoutes";
+export { default as ProductRouter } from "./productsRoutes";
+export { default as CategoryRouter } from "./categoriesRoutes";

@@ -1,9 +1,8 @@
-//@ts-nocheck
 import mongoose from "mongoose";
-import config from "./config/config";
+import config from "./config";
 
 async function startDBConnection() {
-  await mongoose.connect(config.dbUrl);
+  const db = await mongoose.connect(config.dbUrl);
 }
 
 export default startDBConnection;

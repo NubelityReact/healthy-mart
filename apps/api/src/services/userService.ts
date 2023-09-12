@@ -1,12 +1,26 @@
 import { DocumentType } from "@typegoose/typegoose";
 import UserClass, { User } from "../models/user";
+import { INodeError } from "../types/custom";
 
-export const getUserService = async (): Promise<DocumentType<UserClass>[]> => {
+export const getUsersService = async (): Promise<DocumentType<UserClass>[]> => {
   try {
     const users = await User.find();
     return users;
   } catch (error) {
+    console.log({ error });
     throw new Error("Failed to get users");
+  }
+};
+
+export const getUserByCustomField = async (
+  field: string,
+  value: string
+): Promise<DocumentType<UserClass> | null> => {
+  try {
+    const user = await User.findOne({ [field]: value });
+    return user;
+  } catch (error) {
+    throw new Error("Failed to get user by custom field");
   }
 };
 
@@ -17,19 +31,7 @@ export const getUserByIdService = async (
     const user = await User.findById(id);
     return user;
   } catch (error) {
-    throw new Error("Failed to get user by Id");
-  }
-};
-
-export const getUserByCustomField = async (
-  fieldName: string,
-  fieldValue: any
-): Promise<DocumentType<UserClass> | null> => {
-  try {
-    const user = await User.findOne({ [fieldName]: fieldValue });
-    return user;
-  } catch (error) {
-    throw new Error("Failed to get user by Id");
+    throw new Error("Failed to get user by ID");
   }
 };
 
@@ -47,7 +49,7 @@ export const createUserService = async (
 
 export const updateUserService = async (
   id: string,
-  userData: UserClass
+  userData: Partial<UserClass>
 ): Promise<DocumentType<UserClass> | null> => {
   try {
     const updatedUser = await User.findByIdAndUpdate(id, userData, {

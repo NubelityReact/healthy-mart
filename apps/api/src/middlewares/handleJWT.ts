@@ -1,18 +1,23 @@
 import { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken";
-import config from "../config/config";
+import { JsonWebTokenError } from "../utils/errors/error.classes";
+import { verifyToken } from "../services/authService";
+import { TokenTypes } from "../config/constants";
 
-const handleJWT = (req: Request, res: Response, next: NextFunction) => {
+const verifyTokenMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
-  if (!token) return res.status(401).json({ error: "Access denied" });
+  if (!token) throw new JsonWebTokenError("No token provided");
   try {
-    const decodedData = jwt.verify(token, config.jwt_secret);
-    req.user = decodedData;
+    const verified = verifyToken(token, TokenTypes.ACCESS_TOKEN);
+    req.user = verified;
     next();
   } catch (error) {
     next(error);
   }
 };
 
-export default handleJWT;
+export default verifyTokenMiddleware;

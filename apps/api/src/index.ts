@@ -1,28 +1,55 @@
+// @ts-nocheck
+
 import "reflect-metadata";
-import express, { Request, Response } from "express";
-import { AuthRouter, UserRouter } from "./routes";
-import startDBConnection from "./db";
+import express from "express";
+// import cors from 'cors';
+import "./config/cloudinary";
+import "./utils/auth";
+import startDBConnection from "./config/db";
+import {
+  AuthRouter,
+  CategoryRouter,
+  ProductRouter,
+  UserRouter,
+} from "./routes";
 import config from "./config/config";
 import handleNotFound from "./middlewares/notFound";
 import handleErrors from "./middlewares/handleErrors";
-import handleJWT from "./middlewares/handleJWT";
+import session from "express-session";
+import passport from "passport";
 
-const app = express();
 const PORT = config.port;
+const app = express();
+
+//middleware to get the body parsed as json
 app.use(express.json());
+app.use(
+  session({
+    secret: config.session_secret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false },
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+// app.use(cors)
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("changes");
+// Routes
+app.get("/", (req, res) => {
+  console.log("req.user");
+  console.log(req.user);
+  res.send("Hello World");
 });
-
 app.use("/users", UserRouter);
 app.use("/auth", AuthRouter);
+app.use("/products", ProductRouter);
+app.use("/categories", CategoryRouter);
 app.use(handleNotFound);
-// app.use(handleErrors);
+app.use(handleErrors);
 
 startDBConnection();
 
 app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
   console.log(`Server is running in port ${PORT}`);
 });
